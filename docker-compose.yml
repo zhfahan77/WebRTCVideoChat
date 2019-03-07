@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+  websocket:
+    build: .
+    ports:
+      - "8080:8080"
+
+  static-server:
+    build: public
+    command: serve
+    ports:
+      - "5000:5000"
