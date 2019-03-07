@@ -1,11 +1,11 @@
-# docker-webrtc
+# Docker-Webrtc
 
 ## Pre Requisits
 
-Docker
-Docker-compose
+### Docker
+### Docker-compose
 
 ## Run
-docker-compose -d --build
+docker-compose up -d --build
 
-Now you can access the application on http://localhost:5000
+*Now you can access the application on http://localhost:5000
