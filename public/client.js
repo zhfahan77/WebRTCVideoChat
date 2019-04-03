@@ -1,4 +1,5 @@
 const ws = new WebSocket('ws://0.0.0.0:8080')
+let userList = []
 
 ws.onopen = () => {
   console.log('Connected to the signaling server')
@@ -10,12 +11,36 @@ ws.onerror = err => {
 
 ws.onmessage = msg => {
   console.log('Got message', msg.data)
-
   const data = JSON.parse(msg.data)
+
+  if(data.updatedUserList !== undefined) {
+    userList = Array.from(data.updatedUserList)
+  }
+
+  // userList = updatedUserListLocal
+  
+  function addNewUser(el) {
+    if(el === undefined || el === 'undefined') {
+
+    } else {
+      var node = document.createElement("LI");
+      var textnode = document.createTextNode(el);
+      node.appendChild(textnode);
+      document.getElementById("user_list").appendChild(node);
+    }
+  }
+  
+  var myNode = document.getElementById("user_list")
+  while (myNode.firstChild) {
+    myNode.removeChild(myNode.firstChild);
+  }
+  userList.map(el => {
+      addNewUser(el)
+  })
 
   switch (data.type) {
     case 'login':
-      handleLogin(data.success)
+      handleLogin(data)
       break
     case 'offer':
       handleOffer(data.offer, data.username)
@@ -62,8 +87,8 @@ document.querySelector('button#login').addEventListener('click', event => {
   })
 })
 
-const handleLogin = async success => {
-  if (success === false) {
+const handleLogin = async data => {
+  if (data.success === false) {
     alert('😞 Username already taken')
   } else {
     document.querySelector('div#login').style.display = 'none'

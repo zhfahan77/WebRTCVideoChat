@@ -1,6 +1,8 @@
 const WebSocket = require('ws')
 const wss = new WebSocket.Server({ port: 8080 })
 const users = {}
+let Clients = []
+let UserList = []
 
 const sendTo = (ws, message) => {
   ws.send(JSON.stringify(message))
@@ -28,6 +30,16 @@ wss.on('connection', ws => {
           users[data.username] = ws
           ws.username = data.username
           sendTo(ws, { type: 'login', success: true })
+          Clients.push(ws)
+          if(data.username === undefined || data.username === 'undefined') {
+
+          } else {
+            UserList.push(data.username)
+            console.log(UserList)
+            Clients.map(el => {
+              sendTo(el, { updatedUserList : UserList })
+            })
+          }
         }
         break
       case 'offer':
@@ -62,6 +74,7 @@ wss.on('connection', ws => {
         break
       case 'close':
         console.log('Disconnecting from', data.otherUsername)
+        console.log(users[data.otherUsername])
         users[data.otherUsername].otherUsername = null
 
         if (users[data.otherUsername] != null) {
@@ -82,6 +95,8 @@ wss.on('connection', ws => {
 
   ws.on('close', () => {
     if (ws.username) {
+      delete Clients[ws.username]
+      delete UserList[ws.username]
       delete users[ws.username]
 
       if (ws.otherUsername) {

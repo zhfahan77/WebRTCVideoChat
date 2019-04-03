@@ -1,6 +1,6 @@
 FROM node:alpine
 WORKDIR /app
-RUN npm i -g serve
+RUN npm i
 COPY . .
 EXPOSE 5000
-CMD serve
+CMD node app
