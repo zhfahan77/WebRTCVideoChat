@@ -12,30 +12,27 @@ ws.onerror = err => {
 ws.onmessage = msg => {
   console.log('Got message', msg.data)
   const data = JSON.parse(msg.data)
+  let myNode = document.getElementById("user_list")
 
-  if(data.updatedUserList !== undefined) {
+  if(data.updatedUserList) {
     userList = Array.from(data.updatedUserList)
   }
 
-  // userList = updatedUserListLocal
-  
   function addNewUser(el) {
-    if(el === undefined || el === 'undefined') {
-
-    } else {
       var node = document.createElement("LI");
       var textnode = document.createTextNode(el);
       node.appendChild(textnode);
-      document.getElementById("user_list").appendChild(node);
-    }
+      myNode.appendChild(node);
   }
-  
-  var myNode = document.getElementById("user_list")
+
   while (myNode.firstChild) {
     myNode.removeChild(myNode.firstChild);
   }
+
   userList.map(el => {
+    if(el) {
       addNewUser(el)
+    }
   })
 
   switch (data.type) {

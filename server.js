@@ -24,6 +24,7 @@ wss.on('connection', ws => {
     switch (data.type) {
       case 'login':
         console.log('User logged', data.username)
+
         if (users[data.username]) {
           sendTo(ws, { type: 'login', success: false })
         } else {
@@ -31,9 +32,7 @@ wss.on('connection', ws => {
           ws.username = data.username
           sendTo(ws, { type: 'login', success: true })
           Clients.push(ws)
-          if(data.username === undefined || data.username === 'undefined') {
-
-          } else {
+          if(data.username) {
             UserList.push(data.username)
             console.log(UserList)
             Clients.map(el => {
@@ -73,9 +72,10 @@ wss.on('connection', ws => {
         }
         break
       case 'close':
-        console.log('Disconnecting from', data.otherUsername)
-        console.log(users[data.otherUsername])
-        users[data.otherUsername] = null
+        if(users[data.otherUsername]) {
+          console.log('Disconnecting from', data.otherUsername)
+          users[data.otherUsername].otherUsername = null
+        }
 
         if (users[data.otherUsername] != null) {
           sendTo(users[data.otherUsername], { type: 'close' })
@@ -112,7 +112,10 @@ wss.on('connection', ws => {
       UserList = UserList.filter(item => item !== ws.username)
       delete users[ws.username]
 
-      users[ws.otherUsername].otherUsername = null
+      if(users[ws.otherUsername]){
+        users[ws.otherUsername].otherUsername = null
+      }
+
       Clients.map(el => {
         sendTo(el, { updatedUserList : UserList })
       })
