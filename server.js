@@ -75,7 +75,7 @@ wss.on('connection', ws => {
       case 'close':
         console.log('Disconnecting from', data.otherUsername)
         console.log(users[data.otherUsername])
-        users[data.otherUsername].otherUsername = null
+        users[data.otherUsername] = null
 
         if (users[data.otherUsername] != null) {
           sendTo(users[data.otherUsername], { type: 'close' })
@@ -95,17 +95,33 @@ wss.on('connection', ws => {
 
   ws.on('close', () => {
     if (ws.username) {
-      delete Clients[ws.username]
-      delete UserList[ws.username]
+      console.log('Disconnecting from',ws.username)
+      Clients = Clients.filter(item => item.username !== ws.username)
+      UserList = UserList.filter(item => item !== ws.username)
       delete users[ws.username]
 
-      if (ws.otherUsername) {
-        console.log('Disconnecting from ', ws.otherUsername)
-        users[ws.otherUsername].otherUsername = null
+      Clients.map(el => {
+        sendTo(el, { updatedUserList : UserList })
+      })
+    }
 
-        if (users[ws.otherUsername] != null) {
-          sendTo(users[ws.otherUsername], { type: 'close' })
-        }
+    if (ws.otherUsername) {
+      console.log('Disconnecting from',ws.otherUsername)
+
+      Clients = Clients.filter(item => item.username !== ws.username)
+      UserList = UserList.filter(item => item !== ws.username)
+      delete users[ws.username]
+
+      users[ws.otherUsername].otherUsername = null
+      Clients.map(el => {
+        sendTo(el, { updatedUserList : UserList })
+      })
+
+      if (users[ws.otherUsername] != null) {
+        sendTo(users[ws.otherUsername], { type: 'close' })
+        Clients.map(el => {
+          sendTo(el, { updatedUserList : UserList })
+        })
       }
     }
   })
