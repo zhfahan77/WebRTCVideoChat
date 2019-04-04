@@ -170,22 +170,26 @@ document.querySelector('button#call').addEventListener('click', () => {
     return
   }
 
-  otherUsername = callToUsername
+  if(callToUsername === thisuser) {
+    alert("It cant be Kartik calling Kartik 😉")
+  } else {
+    otherUsername = callToUsername
 
-  connection.createOffer(
-    offer => {
-      sendMessage({
-        type: 'offer',
-        offer: offer
-      })
+    connection.createOffer(
+      offer => {
+        sendMessage({
+          type: 'offer',
+          offer: offer
+        })
 
-      connection.setLocalDescription(offer)
-    },
-    error => {
-      alert('Error when creating an offer')
-      console.error(error)
-    }
-  )
+        connection.setLocalDescription(offer)
+      },
+      error => {
+        alert('Error when creating an offer')
+        console.error(error)
+      }
+    )
+  }
 })
 
 const handleOffer = (offer, username) => {
