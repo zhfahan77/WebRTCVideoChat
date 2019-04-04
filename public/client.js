@@ -20,8 +20,11 @@ ws.onmessage = msg => {
 
   function addNewUser(el) {
       var node = document.createElement("LI");
-      var textnode = document.createTextNode(el);
-      node.appendChild(textnode);
+      var a = document.createElement('a');
+      var linkText = document.createTextNode(el);
+      a.href = "javascript:onClickUserList(" + "'" + el + "'" + ")"
+      a.text = el
+      node.appendChild(a);
       myNode.appendChild(node);
   }
 
@@ -125,6 +128,32 @@ const handleLogin = async data => {
       }
     }
   }
+}
+
+let onClickUserList = function(el) {
+  const callToUsername = el
+
+  if (callToUsername.length === 0) {
+    alert('Enter a username 😉')
+    return
+  }
+
+  otherUsername = callToUsername
+
+  connection.createOffer(
+    offer => {
+      sendMessage({
+        type: 'offer',
+        offer: offer
+      })
+
+      connection.setLocalDescription(offer)
+    },
+    error => {
+      alert('Error when creating an offer')
+      console.error(error)
+    }
+  )
 }
 
 document.querySelector('button#call').addEventListener('click', () => {
