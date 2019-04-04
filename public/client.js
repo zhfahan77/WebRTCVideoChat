@@ -1,5 +1,6 @@
 const ws = new WebSocket('ws://0.0.0.0:8080')
 let userList = []
+let thisuser
 
 ws.onopen = () => {
   console.log('Connected to the signaling server')
@@ -91,6 +92,7 @@ const handleLogin = async data => {
   if (data.success === false) {
     alert('😞 Username already taken')
   } else {
+    thisuser = data.user
     document.querySelector('div#login').style.display = 'none'
     document.querySelector('div#call').style.display = 'block'
 
@@ -131,29 +133,33 @@ const handleLogin = async data => {
 }
 
 let onClickUserList = function(el) {
-  const callToUsername = el
+  if(el === thisuser) {
+    alert("It cant be Kartik calling Kartik 😉")
+  } else {
+    const callToUsername = el
 
-  if (callToUsername.length === 0) {
-    alert('Enter a username 😉')
-    return
-  }
-
-  otherUsername = callToUsername
-
-  connection.createOffer(
-    offer => {
-      sendMessage({
-        type: 'offer',
-        offer: offer
-      })
-
-      connection.setLocalDescription(offer)
-    },
-    error => {
-      alert('Error when creating an offer')
-      console.error(error)
+    if (callToUsername.length === 0) {
+      alert('Enter a username 😉')
+      return
     }
-  )
+
+    otherUsername = callToUsername
+
+    connection.createOffer(
+      offer => {
+        sendMessage({
+          type: 'offer',
+          offer: offer
+        })
+
+        connection.setLocalDescription(offer)
+      },
+      error => {
+        alert('Error when creating an offer')
+        console.error(error)
+      }
+    )
+  }
 }
 
 document.querySelector('button#call').addEventListener('click', () => {

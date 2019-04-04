@@ -30,7 +30,7 @@ wss.on('connection', ws => {
         } else {
           users[data.username] = ws
           ws.username = data.username
-          sendTo(ws, { type: 'login', success: true })
+          sendTo(ws, { type: 'login', success: true, user : data.username })
           Clients.push(ws)
           if(data.username) {
             UserList.push(data.username)
