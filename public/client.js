@@ -20,13 +20,12 @@ ws.onmessage = msg => {
   }
 
   function addNewUser(el) {
-      var node = document.createElement("LI");
-      var a = document.createElement('a');
+      var a = document.createElement('a')
+      a.className = 'list-group-item list-group-item-action active border_btm';
       var linkText = document.createTextNode(el);
       a.href = "javascript:onClickUserList(" + "'" + el + "'" + ")"
       a.text = el
-      node.appendChild(a);
-      myNode.appendChild(node);
+      myNode.appendChild(a);
   }
 
   while (myNode.firstChild) {
