@@ -8,6 +8,5 @@ services:
 
   static-server:
     build: public
-    command: serve
     ports:
       - "5000:5000"

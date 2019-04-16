@@ -2,29 +2,54 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <title>WebRTC</title>
-  <link href="style.css" rel="stylesheet" type="text/css" />
+    <meta charset="UTF-8">
+    <title>WebRTC | Demo</title>
+    <link href="assets/css/style.css" rel="stylesheet" type="text/css" />
+    <link href="assets/css/custom.css" rel="stylesheet" type="text/css" />
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
 </head>
 
 <body>
-  <div id="login">
-    <label for="username">Login</label>
-    <input id="username" placeholder="Login" required="" autofocus="">
-    <button id="login">Login</button>
-  </div>
-
-  <div id="call">
-    <video id="local" autoplay></video>
-    <video id="remote" autoplay></video>
-
-    <div>
-      <input id="username-to-call" placeholder="Username to call" />
-      <button id="call">Call</button>
-      <button id="close-call">Close call</button>
+    <div id="login" class="login-box">
+        <div class="login-logo">
+            <img src="assets/img/analytics_64dp.png" alt="My Ad Cubes">
+        </div><!-- /.login-logo -->
+        <div class="login-box-body">
+            <p class="login-box-msg">Sign in to start your session</p>
+            <div class="form-group has-feedback">
+                <input type="text" name="login" value="" placeholder="Username" class="form-control" id="username" maxlength="80" size="30"> <span class="glyphicon glyphicon-user form-control-feedback"></span>
+                <span>
+                    <font color="red"></font>
+                </span>
+            </div>
+            <div class="row">
+                <div class="col-lg-12 col-xs-4">
+                    <button type="submit" name="submit" value="Log In" id="login" class="btn btn-primary btn-block btn-flat">Log In</button>
+                </div><!-- /.col -->
+            </div>
+        </div><!-- /.login-box-body -->
     </div>
-  </div>
+    <div id="call">
+        <video class="margin_top_10" id="local" autoplay></video>
+        <video class="margin_top_10" id="remote" autoplay></video>
+        <div class="input-group">
+            <input type="text" class="form-control" placeholder="Username to Call" aria-label="Recipient's username" aria-describedby="basic-addon2" id="username-to-call">
+            <div class="input-group-append">
+                <button class="btn btn-primary btn-flat" id="call" type="button">Call</button>
+                <button class="btn btn-secondary btn-red btn-flat" id="close-call" type="button">Close Call</button>
+            </div>
+        </div>
+        <div class="list-group margin_top_35">
+            <h4>User List</h4>
+            <div id="user_list"></div>
+        </div>
+    </div>
 </body>
 <script src="client.js"></script>
+<!-- Bootstrap JS -->
+<script src="assets/js/jquery-3.3.1.slim.min.js"></script>
+<script src="assets/js/popper.min.js"></script>
+<script src="assets/js/bootstrap.min.js"></script>
 
 </html>

@@ -1,6 +1,8 @@
 const WebSocket = require('ws')
 const wss = new WebSocket.Server({ port: 8080 })
 const users = {}
+let Clients = []
+let UserList = []
 
 const sendTo = (ws, message) => {
   ws.send(JSON.stringify(message))
@@ -22,12 +24,21 @@ wss.on('connection', ws => {
     switch (data.type) {
       case 'login':
         console.log('User logged', data.username)
+
         if (users[data.username]) {
           sendTo(ws, { type: 'login', success: false })
         } else {
           users[data.username] = ws
           ws.username = data.username
-          sendTo(ws, { type: 'login', success: true })
+          sendTo(ws, { type: 'login', success: true, user : data.username })
+          Clients.push(ws)
+          if(data.username) {
+            UserList.push(data.username)
+            console.log(UserList)
+            Clients.map(el => {
+              sendTo(el, { updatedUserList : UserList })
+            })
+          }
         }
         break
       case 'offer':
@@ -61,8 +72,10 @@ wss.on('connection', ws => {
         }
         break
       case 'close':
-        console.log('Disconnecting from', data.otherUsername)
-        users[data.otherUsername].otherUsername = null
+        if(users[data.otherUsername]) {
+          console.log('Disconnecting from', data.otherUsername)
+          users[data.otherUsername].otherUsername = null
+        }
 
         if (users[data.otherUsername] != null) {
           sendTo(users[data.otherUsername], { type: 'close' })
@@ -82,15 +95,36 @@ wss.on('connection', ws => {
 
   ws.on('close', () => {
     if (ws.username) {
+      console.log('Disconnecting from',ws.username)
+      Clients = Clients.filter(item => item.username !== ws.username)
+      UserList = UserList.filter(item => item !== ws.username)
       delete users[ws.username]
 
-      if (ws.otherUsername) {
-        console.log('Disconnecting from ', ws.otherUsername)
-        users[ws.otherUsername].otherUsername = null
+      Clients.map(el => {
+        sendTo(el, { updatedUserList : UserList })
+      })
+    }
 
-        if (users[ws.otherUsername] != null) {
-          sendTo(users[ws.otherUsername], { type: 'close' })
-        }
+    if (ws.otherUsername) {
+      console.log('Disconnecting from',ws.otherUsername)
+
+      Clients = Clients.filter(item => item.username !== ws.username)
+      UserList = UserList.filter(item => item !== ws.username)
+      delete users[ws.username]
+
+      if(users[ws.otherUsername]){
+        users[ws.otherUsername].otherUsername = null
+      }
+
+      Clients.map(el => {
+        sendTo(el, { updatedUserList : UserList })
+      })
+
+      if (users[ws.otherUsername] != null) {
+        sendTo(users[ws.otherUsername], { type: 'close' })
+        Clients.map(el => {
+          sendTo(el, { updatedUserList : UserList })
+        })
       }
     }
   })

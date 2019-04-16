@@ -8,7 +8,7 @@ div#call {
 
 video {
   background: black;
-  border: 1px solid gray;
+  border: 1px solid #eee;
 }
 
 video#local {
@@ -20,6 +20,6 @@ video#local {
 }
 
 video#remote {
-  width: 500px;
+  width: 100%;
   height: 500px;
 }

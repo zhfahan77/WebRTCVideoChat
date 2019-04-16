@@ -1,6 +1,8 @@
 FROM node:alpine
 WORKDIR /app
-RUN npm i -g serve
+COPY ./package* ./
+RUN npm install
 COPY . .
+RUN ./dynamicip.sh
 EXPOSE 5000
-CMD serve
+CMD node app

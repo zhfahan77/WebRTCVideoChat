@@ -1,4 +1,6 @@
 const ws = new WebSocket('ws://0.0.0.0:8080')
+let userList = []
+let thisuser
 
 ws.onopen = () => {
   console.log('Connected to the signaling server')
@@ -10,12 +12,35 @@ ws.onerror = err => {
 
 ws.onmessage = msg => {
   console.log('Got message', msg.data)
-
   const data = JSON.parse(msg.data)
+  let myNode = document.getElementById("user_list")
+
+  if(data.updatedUserList) {
+    userList = Array.from(data.updatedUserList)
+  }
+
+  function addNewUser(el) {
+      var a = document.createElement('a')
+      a.className = 'list-group-item list-group-item-action active border_btm';
+      var linkText = document.createTextNode(el);
+      a.href = "javascript:onClickUserList(" + "'" + el + "'" + ")"
+      a.text = el
+      myNode.appendChild(a);
+  }
+
+  while (myNode.firstChild) {
+    myNode.removeChild(myNode.firstChild);
+  }
+
+  userList.map(el => {
+    if(el) {
+      addNewUser(el)
+    }
+  })
 
   switch (data.type) {
     case 'login':
-      handleLogin(data.success)
+      handleLogin(data)
       break
     case 'offer':
       handleOffer(data.offer, data.username)
@@ -62,10 +87,11 @@ document.querySelector('button#login').addEventListener('click', event => {
   })
 })
 
-const handleLogin = async success => {
-  if (success === false) {
+const handleLogin = async data => {
+  if (data.success === false) {
     alert('😞 Username already taken')
   } else {
+    thisuser = data.user
     document.querySelector('div#login').style.display = 'none'
     document.querySelector('div#call').style.display = 'block'
 
@@ -105,6 +131,36 @@ const handleLogin = async success => {
   }
 }
 
+let onClickUserList = function(el) {
+  if(el === thisuser) {
+    alert("It cant be Kartik calling Kartik 😉")
+  } else {
+    const callToUsername = el
+
+    if (callToUsername.length === 0) {
+      alert('Enter a username 😉')
+      return
+    }
+
+    otherUsername = callToUsername
+
+    connection.createOffer(
+      offer => {
+        sendMessage({
+          type: 'offer',
+          offer: offer
+        })
+
+        connection.setLocalDescription(offer)
+      },
+      error => {
+        alert('Error when creating an offer')
+        console.error(error)
+      }
+    )
+  }
+}
+
 document.querySelector('button#call').addEventListener('click', () => {
   const callToUsername = document.querySelector('input#username-to-call').value
 
@@ -113,22 +169,26 @@ document.querySelector('button#call').addEventListener('click', () => {
     return
   }
 
-  otherUsername = callToUsername
+  if(callToUsername === thisuser) {
+    alert("It cant be Kartik calling Kartik 😉")
+  } else {
+    otherUsername = callToUsername
 
-  connection.createOffer(
-    offer => {
-      sendMessage({
-        type: 'offer',
-        offer: offer
-      })
+    connection.createOffer(
+      offer => {
+        sendMessage({
+          type: 'offer',
+          offer: offer
+        })
 
-      connection.setLocalDescription(offer)
-    },
-    error => {
-      alert('Error when creating an offer')
-      console.error(error)
-    }
-  )
+        connection.setLocalDescription(offer)
+      },
+      error => {
+        alert('Error when creating an offer')
+        console.error(error)
+      }
+    )
+  }
 })
 
 const handleOffer = (offer, username) => {
@@ -170,4 +230,5 @@ const handleClose = () => {
   connection.close()
   connection.onicecandidate = null
   connection.onaddstream = null
+  location.reload()
 }
