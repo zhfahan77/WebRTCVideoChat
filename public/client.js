@@ -230,4 +230,5 @@ const handleClose = () => {
   connection.close()
   connection.onicecandidate = null
   connection.onaddstream = null
+  location.reload()
 }
