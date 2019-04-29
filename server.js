@@ -31,15 +31,17 @@ wss.on('connection', ws => {
           "confirmPassword" : data.confirmPassword
         }
 
-        User.registerUser(userData)
+        User
+          .registerUser(userData)
           .then(result => {
+            result.type = 'register'
             sendTo(ws, result)
           })
           .catch(err => {
+            console.log(err)
             err.type = "register"
             sendTo(ws, err)
           })
-        
         break
       case 'login':
         let userLoginData = {
@@ -47,7 +49,8 @@ wss.on('connection', ws => {
           "password" : data.password
         }
 
-        User.loginUser(userLoginData)
+        User
+          .loginUser(userLoginData)
           .then(result => {
             if(result.success) {
               console.log('User logged', data.username)
@@ -70,22 +73,6 @@ wss.on('connection', ws => {
               sendTo(ws, err)  
             }
           })
-        
-          // if (!loggedin) {
-          //   sendTo(ws, { type: 'login', success: false })
-          // } else {
-          //   users[data.username] = ws
-          //   ws.username = data.username
-          //   sendTo(ws, { type: 'login', success: true, user : data.username })
-          //   Clients.push(ws)
-          //   if(data.username) {
-          //     UserList.push(data.username)
-          //     console.log(UserList)
-          //     Clients.map(el => {
-          //       sendTo(el, { updatedUserList : UserList })
-          //     })
-          //   }
-          // }
         break
       case 'offer':
         console.log('Sending offer to: ', data.otherUsername)

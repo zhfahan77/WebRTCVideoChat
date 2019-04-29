@@ -17,6 +17,7 @@ module.exports.registerUser = function(Data) {
             .then(result => {
                 resolve({ "message": "Registration successful, Please Login", "statusCode" : 201 })
             }).catch(err => {
+                console.log(err)
                 if(err.code === 11000) {
                     return reject({ "message": "User already exists", "statusCode" : 422 })
                 }
