@@ -1,8 +1,10 @@
+require("./db/db.js")
 const WebSocket = require('ws')
 const wss = new WebSocket.Server({ port: 8080 })
 const users = {}
 let Clients = []
 let UserList = []
+let User = require("./db/user.js")
 
 const sendTo = (ws, message) => {
   ws.send(JSON.stringify(message))
@@ -22,6 +24,22 @@ wss.on('connection', ws => {
     }
 
     switch (data.type) {
+      case 'register':
+        let userData = {
+          "username" : data.username,
+          "password" : data.password,
+          "confirmPassword" : data.confirmPassword
+        }
+
+        User.registerUser(userData)
+          .then(result => {
+            sendTo(ws, result)
+          })
+          .catch(err => {
+            sendTo(ws, err)
+          })
+        
+        break
       case 'login':
         console.log('User logged', data.username)
 

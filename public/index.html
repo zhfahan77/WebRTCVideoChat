@@ -11,24 +11,62 @@
 </head>
 
 <body>
-    <div id="login" class="login-box">
-        <div class="login-logo">
-            <img src="assets/img/analytics_64dp.png" alt="My Ad Cubes">
-        </div><!-- /.login-logo -->
-        <div class="login-box-body">
-            <p class="login-box-msg">Sign in to start your session</p>
-            <div class="form-group has-feedback">
-                <input type="text" name="login" value="" placeholder="Username" class="form-control" id="username" maxlength="80" size="30"> <span class="glyphicon glyphicon-user form-control-feedback"></span>
-                <span>
-                    <font color="red"></font>
-                </span>
+    <div class="row">
+        <div class="col-lg-5">
+            <div id="register" class="login-box register">
+                <div class="login-logo">
+                    <img src="assets/img/analytics_64dp.png" alt="My Ad Cubes">
+                </div><!-- /.login-logo -->
+                <div class="login-box-body">
+                    <p class="login-box-msg">Sign up to register</p>
+                    <p id="err_msg"></p>
+                    <div class="form-group has-feedback">
+                        <input type="text" name="username" value="" placeholder="Username" class="form-control" id="regusername" maxlength="80" size="30"> <span class="glyphicon glyphicon-user form-control-feedback"></span>
+                        <font color="red"></font>
+                        </span>
+                    </div>
+                    <div class="form-group has-feedback">
+                        <input type="password" name="password" value="" placeholder="Password" class="form-control" id="regpassword" maxlength="80" size="30"> <span class="glyphicon glyphicon-user form-control-feedback"></span>
+                        <font color="red"></font>
+                        </span>
+                    </div>
+                    <div class="form-group has-feedback">
+                        <input type="password" name="confirPassword" value="" placeholder="Password" class="form-control" id="regconfirmpassword" maxlength="80" size="30"> <span class="glyphicon glyphicon-user form-control-feedback"></span>
+                        <font color="red"></font>
+                        </span>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12 col-xs-4">
+                            <button type="submit" name="submit" value="Register" id="register" class="btn btn-primary btn-block btn-flat">Register</button>
+                        </div><!-- /.col -->
+                    </div>
+                </div><!-- /.login-box-body -->
             </div>
-            <div class="row">
-                <div class="col-lg-12 col-xs-4">
-                    <button type="submit" name="submit" value="Log In" id="login" class="btn btn-primary btn-block btn-flat">Log In</button>
-                </div><!-- /.col -->
+        </div>
+        <div class="col-lg-2">
+            <hr class="vertcal"/>
+        </div>
+        <div class="col-lg-5">
+            <div id="login" class="login-box login">
+                <div class="login-logo">
+                    <img src="assets/img/analytics_64dp.png" alt="My Ad Cubes">
+                </div><!-- /.login-logo -->
+                <div class="login-box-body">
+                    <p class="login-box-msg">Sign in to start your session</p>
+                    <div class="form-group has-feedback">
+                        <input type="text" name="login" value="" placeholder="Username" class="form-control" id="username" maxlength="80" size="30"> <span class="glyphicon glyphicon-user form-control-feedback"></span>
+                        <span>
+                            <font color="red"></font>
+                        </span>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12 col-xs-4">
+                            <button type="submit" name="submit" value="Log In" id="login" class="btn btn-primary btn-block btn-flat">Log In</button>
+                        </div><!-- /.col -->
+                    </div>
+                </div><!-- /.login-box-body -->
             </div>
-        </div><!-- /.login-box-body -->
+        </div>
     </div>
     <div id="call">
         <video class="margin_top_10" id="local" autoplay></video>

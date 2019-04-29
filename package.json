@@ -9,6 +9,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "crypto": "^1.0.1",
+    "dotenv": "^7.0.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.5.4",
     "ws": "^6.2.0"
   }
 }

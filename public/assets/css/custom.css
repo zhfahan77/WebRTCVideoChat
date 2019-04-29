@@ -120,3 +120,14 @@ body {
 .border_btm {
     border-color: #e9ebee !important;
 }
+
+.vertcal {
+    border: 1px solid #cfcece;
+    height: 100vh;
+    width: 0px;
+}
+
+#err_msg {
+    color: red;
+    font-size: 17px;
+}

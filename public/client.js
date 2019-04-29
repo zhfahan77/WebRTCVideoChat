@@ -13,6 +13,14 @@ ws.onerror = err => {
 ws.onmessage = msg => {
   console.log('Got message', msg.data)
   const data = JSON.parse(msg.data)
+  
+  if (data.message) {
+    document.getElementById("err_msg").innerHTML = data.message
+    setTimeout(function(){ 
+      document.getElementById("err_msg").innerHTML = ''
+    }, 2000);
+  }
+
   let myNode = document.getElementById("user_list")
 
   if(data.updatedUserList) {
@@ -85,6 +93,27 @@ document.querySelector('button#login').addEventListener('click', event => {
     type: 'login',
     username: username
   })
+})
+
+document.querySelector('button#register').addEventListener('click', event => {
+  username = document.querySelector('input#regusername').value
+  password = document.querySelector('input#regpassword').value
+  confirmPassword = document.querySelector('input#regconfirmpassword').value
+
+  let user_data = {
+    'username' : username,
+    'password' : password,
+    'confirmPassword' : confirmPassword
+  }
+
+  user_data.type = 'register'
+
+  if (username.length < 0) {
+    alert('Please enter a username 🙂')
+    return
+  }
+
+  sendMessage(user_data)
 })
 
 const handleLogin = async data => {
