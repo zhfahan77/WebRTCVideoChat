@@ -14,7 +14,7 @@ ws.onmessage = msg => {
   console.log('Got message', msg.data)
   const data = JSON.parse(msg.data)
   
-  if (data.message) {
+  if (data.message && data.type === 'register') {
     document.getElementById("err_msg").innerHTML = data.message
     setTimeout(function(){ 
       document.getElementById("err_msg").innerHTML = ''
@@ -83,16 +83,21 @@ document.querySelector('div#call').style.display = 'none'
 
 document.querySelector('button#login').addEventListener('click', event => {
   username = document.querySelector('input#username').value
+  password = document.querySelector('input#password').value
 
   if (username.length < 0) {
     alert('Please enter a username 🙂')
     return
   }
 
-  sendMessage({
-    type: 'login',
-    username: username
-  })
+  let login_data = {
+    'username' : username,
+    'password' : password,
+  }
+
+  login_data.type = 'login'
+
+  sendMessage(login_data)
 })
 
 document.querySelector('button#register').addEventListener('click', event => {
@@ -117,11 +122,19 @@ document.querySelector('button#register').addEventListener('click', event => {
 })
 
 const handleLogin = async data => {
-  if (data.success === false) {
-    alert('😞 Username already taken')
+  if (data.message) {
+    if (data.message) {
+      document.getElementById("err_msg_login").innerHTML = data.message
+      setTimeout(function(){ 
+        document.getElementById("err_msg_login").innerHTML = ''
+      }, 2000);
+    }
   } else {
+    console.log(data)
     thisuser = data.user
     document.querySelector('div#login').style.display = 'none'
+    document.querySelector('div#register').style.display = 'none'
+    document.querySelector('div#sepr').style.display = 'none'
     document.querySelector('div#call').style.display = 'block'
 
     let localStream

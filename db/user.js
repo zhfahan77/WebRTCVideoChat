@@ -34,8 +34,9 @@ module.exports.loginUser = function(Data) {
         }
 
         User
-            .findOne({ user: Data.username })
+            .findOne({ username: Data.username })
             .then(result => {
+                console.log(result)
                 if(!result) {
                     return reject({ "message": "No User found", "statusCode" : 404 })
                 }
@@ -43,10 +44,11 @@ module.exports.loginUser = function(Data) {
                 if(!result.validPassword(Data.password)) {
                     return reject({ "message": "Password is wrong", "statusCode" : 422 })
                 }
-                resolve({ "token": result.generateJwt() })
+
+                resolve({ "token": result.generateJwt(), "statusCode" : 200 , "success" : true })
             })
             .catch(err => {
-
+                console.log(err)
             })
     })
 }

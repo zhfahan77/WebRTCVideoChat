@@ -36,28 +36,56 @@ wss.on('connection', ws => {
             sendTo(ws, result)
           })
           .catch(err => {
+            err.type = "register"
             sendTo(ws, err)
           })
         
         break
       case 'login':
-        console.log('User logged', data.username)
-
-        if (users[data.username]) {
-          sendTo(ws, { type: 'login', success: false })
-        } else {
-          users[data.username] = ws
-          ws.username = data.username
-          sendTo(ws, { type: 'login', success: true, user : data.username })
-          Clients.push(ws)
-          if(data.username) {
-            UserList.push(data.username)
-            console.log(UserList)
-            Clients.map(el => {
-              sendTo(el, { updatedUserList : UserList })
-            })
-          }
+        let userLoginData = {
+          "username" : data.username,
+          "password" : data.password
         }
+
+        User.loginUser(userLoginData)
+          .then(result => {
+            if(result.success) {
+              console.log('User logged', data.username)
+              users[data.username] = ws
+              ws.username = data.username
+              sendTo(ws, { type: 'login', success: true, user : data.username })
+              Clients.push(ws)
+              
+              if(data.username) {
+                UserList.push(data.username)
+                console.log(UserList)
+                Clients.map(el => {
+                  sendTo(el, { updatedUserList : UserList })
+                })
+              }
+            }
+          }).catch(err => {
+            if(err.message) {
+              err.type = "login"
+              sendTo(ws, err)  
+            }
+          })
+        
+          // if (!loggedin) {
+          //   sendTo(ws, { type: 'login', success: false })
+          // } else {
+          //   users[data.username] = ws
+          //   ws.username = data.username
+          //   sendTo(ws, { type: 'login', success: true, user : data.username })
+          //   Clients.push(ws)
+          //   if(data.username) {
+          //     UserList.push(data.username)
+          //     console.log(UserList)
+          //     Clients.map(el => {
+          //       sendTo(el, { updatedUserList : UserList })
+          //     })
+          //   }
+          // }
         break
       case 'offer':
         console.log('Sending offer to: ', data.otherUsername)

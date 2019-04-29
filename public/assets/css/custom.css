@@ -127,7 +127,7 @@ body {
     width: 0px;
 }
 
-#err_msg {
+#err_msg, #err_msg_login {
     color: red;
     font-size: 17px;
 }
