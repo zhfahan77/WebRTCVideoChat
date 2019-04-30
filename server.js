@@ -1,8 +1,10 @@
+require("./db/db.js")
 const WebSocket = require('ws')
 const wss = new WebSocket.Server({ port: 8080 })
 const users = {}
 let Clients = []
 let UserList = []
+let User = require("./db/user.js")
 
 const sendTo = (ws, message) => {
   ws.send(JSON.stringify(message))
@@ -22,24 +24,55 @@ wss.on('connection', ws => {
     }
 
     switch (data.type) {
-      case 'login':
-        console.log('User logged', data.username)
-
-        if (users[data.username]) {
-          sendTo(ws, { type: 'login', success: false })
-        } else {
-          users[data.username] = ws
-          ws.username = data.username
-          sendTo(ws, { type: 'login', success: true, user : data.username })
-          Clients.push(ws)
-          if(data.username) {
-            UserList.push(data.username)
-            console.log(UserList)
-            Clients.map(el => {
-              sendTo(el, { updatedUserList : UserList })
-            })
-          }
+      case 'register':
+        let userData = {
+          "username" : data.username,
+          "password" : data.password,
+          "confirmPassword" : data.confirmPassword
         }
+
+        User
+          .registerUser(userData)
+          .then(result => {
+            result.type = 'register'
+            sendTo(ws, result)
+          })
+          .catch(err => {
+            console.log(err)
+            err.type = "register"
+            sendTo(ws, err)
+          })
+        break
+      case 'login':
+        let userLoginData = {
+          "username" : data.username,
+          "password" : data.password
+        }
+
+        User
+          .loginUser(userLoginData)
+          .then(result => {
+            if(result.success) {
+              console.log('User logged', data.username)
+              users[data.username] = ws
+              ws.username = data.username
+              sendTo(ws, { type: 'login', success: true, user : data.username })
+              Clients.push(ws)
+              
+              if(data.username) {
+                UserList.push(data.username)
+                console.log(UserList)
+                Clients.map(el => {
+                  sendTo(el, { updatedUserList : UserList })
+                })
+              }
+            }
+          }).catch(err => {
+            if(err.message) {
+              err.type = "login"
+              sendTo(ws, err)  
+            }
+          })
         break
       case 'offer':
         console.log('Sending offer to: ', data.otherUsername)
