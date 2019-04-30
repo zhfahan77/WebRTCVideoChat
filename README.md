@@ -50,33 +50,49 @@ SECRET=<your_secret>
 ## Start
 
 ### In Linux
+```
 make up
+```
 
 ### In Windows
+```
 docker-compose up -d --build
+```
 
 ## Down
 
 ### In Linux
+```
 make down
+```
 
 ### In Windows
+```
 docker-compose down
+```
 
 ## Build Only
 
 ### In Linux
+```
 make build
+```
 
 ### In Windows
+```
 docker-compose build
+```
 
 ## Remove Everything
 
 ### In Linux
+```
 make clean
+```
 
 ### In Windows
+```
 docker-compose down -v
+```
 
 *Now you can access the application on http://localhost:5000
