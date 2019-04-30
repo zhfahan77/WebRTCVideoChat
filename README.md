@@ -26,6 +26,21 @@ The WebSocket object provides the API for creating and managing a WebSocket conn
 
 Node.js® is a JavaScript runtime built on Chrome's V8 JavaScript engine.
 
+## Setup
+
+In `public` dir, create a .env file, add your websocket server's IP
+
+```
+WEBSOCKET_IP=192.168.1.100
+```
+
+In root dir of the project, create a .env file to replace env variables if needed (To Run using node command)
+
+```
+dbURL=mongodb://<mongodb_host_ip>:<mongodb_port>/<database_name>
+SECRET=<your_secret>
+```
+
 
 ## Pre Requisits
 
