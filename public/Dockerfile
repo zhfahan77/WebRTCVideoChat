@@ -5,4 +5,4 @@ RUN npm install
 COPY . .
 RUN ./dynamicip.sh
 EXPOSE 5000
-CMD node app
+CMD NODE_ENV=production node app
