@@ -1,4 +1,4 @@
-# Docker-Webrtc
+# WebRTCVideoChat
 
 ## Pre Requisits
 
