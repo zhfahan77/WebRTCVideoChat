@@ -29,8 +29,8 @@ Node.js® is a JavaScript runtime built on Chrome's V8 JavaScript engine.
 
 ## Pre Requisits
 
-### Docker
-### Docker-Compose
+* [Docker CE](https://docs.docker.com/install/linux/docker-ce/ubuntu/)
+* [Docker Compose](https://docs.docker.com/compose/install/#install-compose)
 
 ## Start
 
