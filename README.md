@@ -95,4 +95,4 @@ make clean
 docker-compose down -v
 ```
 
-*Now you can access the application on http://localhost:5000
+*Now you can access the application on https://localhost
