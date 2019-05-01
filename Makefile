@@ -17,4 +17,4 @@ down: ## Bring Down the container
 
 clean: ## Remove the container with volume
 	@echo "Removing Container"
-	@docker-compose -v
+	@docker-compose down -v

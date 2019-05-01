@@ -6,7 +6,7 @@ services:
     depends_on: 
       - mongodbhost
     environment:
-      - dbURL=mongodb://mongodbhost/websocket
+      - dbURL=mongodb://mongodbhost:27017/websocket
       - SECRET=se3cret334
     ports:
       - "8080:8080"
@@ -14,7 +14,8 @@ services:
   static-server:
     build: public
     ports:
-      - "5000:5000"
+      - "443:443"
+      - "80:80"
 
   mongodbhost:
         image: mongo:latest
